@@ -1,0 +1,35 @@
+# Per-project workflow-framework config. Survives `agent sync`.
+project:
+  name: recipes-frontend
+  ticket_prefix: DIGT
+
+# Task provider for /idea, /tasks, /estimate, etc.
+task_provider: linear
+
+# Linear workspace binding. team_id is required; the rest are optional
+# and can be filled once you create the project / states / labels.
+linear:
+  team_id: "68f310e0-4b81-41a0-b060-b6aa988a7e87"   # Digt
+  project_id: ""
+  state_ids:
+    todo: ""
+    in_progress: ""
+    in_review: ""
+    done: ""
+  label_ids: {}
+
+# Confidence gate thresholds.
+confidence:
+  enforce: false
+  min_per_dimension: 3
+  min_total: 18
+
+# Git defaults.
+git:
+  branch_pattern: "task/{ticket}-{slug}"
+  commit_pattern: "{type}: {ticket} {description}"
+  base_branch: main
+
+# Stack preset(s) this project uses.
+stacks:
+  - node-typescript

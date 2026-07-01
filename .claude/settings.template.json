@@ -1,0 +1,10 @@
+{
+  "_comment": "Sample permissions allowlist for the agent workflow framework. Merge into .claude/settings.local.json.",
+  "permissions": {
+    "allow": [
+      "Bash(./.agent/bin/agent:*)",
+      "Bash(git submodule update:*)",
+      "Bash(git -C .agent:*)"
+    ]
+  }
+}

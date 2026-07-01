@@ -1,0 +1,11 @@
+parameters:
+    level: 6
+    paths:
+        - src
+
+    # No src code triggers these patterns yet; don't fail while the project is empty.
+    reportUnmatchedIgnoredErrors: false
+
+    ignoreErrors:
+        -
+            identifier: missingType.iterableValue
