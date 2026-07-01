@@ -1,13 +1,13 @@
 import { expect, test } from '@playwright/test'
 
-// DIGT-32 — restyle the landing-page title (48px / text-5xl, exact red,
-// both color schemes). These run against the real dev server, so
-// getComputedStyle reflects the actual compiled Tailwind CSS — unlike the
-// Vitest/jsdom unit tests in tests/page.test.tsx, which assert on class
-// tokens only.
+// DIGT-33 — enlarge and recolor the landing-page title to blue (60px /
+// text-6xl, exact blue #0000ff in light mode, lighter blue #60a5fa in dark
+// mode). These run against the real dev server, so getComputedStyle
+// reflects the actual compiled Tailwind CSS — unlike the Vitest/jsdom unit
+// tests in tests/page.test.tsx, which assert on class tokens only.
 
-test.describe('Homepage title (DIGT-32)', () => {
-  test('TC1/TC2: renders "Recipes" at 48px in exact red (light mode)', async ({ page }) => {
+test.describe('Homepage title (DIGT-33)', () => {
+  test('TC1/TC2: renders "Recipes" at 60px in exact blue (light mode)', async ({ page }) => {
     await page.emulateMedia({ colorScheme: 'light' })
     await page.goto('/')
 
@@ -19,19 +19,25 @@ test.describe('Homepage title (DIGT-32)', () => {
       return { fontSize: style.fontSize, color: style.color }
     })
 
-    expect(fontSize).toBe('48px')
-    expect(color).toBe('rgb(255, 0, 0)')
+    expect(fontSize).toBe('60px')
+    expect(color).toBe('rgb(0, 0, 255)')
   })
 
-  test('TC3: stays exact red in dark mode (no zinc override)', async ({ page }) => {
+  test('TC3: switches to the lighter blue-400 in dark mode (not exact blue)', async ({ page }) => {
     await page.emulateMedia({ colorScheme: 'dark' })
     await page.goto('/')
 
     const heading = page.getByRole('heading', { level: 1, name: 'Recipes' })
     await expect(heading).toBeVisible()
 
-    const color = await heading.evaluate((el) => window.getComputedStyle(el).color)
-    expect(color).toBe('rgb(255, 0, 0)')
+    const { fontSize, color } = await heading.evaluate((el) => {
+      const style = window.getComputedStyle(el)
+      return { fontSize: style.fontSize, color: style.color }
+    })
+
+    expect(fontSize).toBe('60px')
+    expect(color).toBe('rgb(96, 165, 250)')
+    expect(color).not.toBe('rgb(0, 0, 255)')
   })
 
   test('TC6: no horizontal overflow and header alignment holds at mobile width (375px)', async ({
