@@ -3,35 +3,41 @@ import { describe, expect, it } from 'vitest'
 
 import Home from '@/app/page'
 
-// DIGT-32 — restyle the landing-page title (48px / text-5xl, exact red).
+// DIGT-33 — enlarge and recolor the landing-page title to blue (60px /
+// text-6xl, exact blue in light, lighter blue in dark).
 // jsdom does not run the Tailwind PostCSS pipeline, so `getComputedStyle`
 // here would only reflect jsdom's built-in defaults, not the compiled
 // utility CSS. We assert on the Tailwind class tokens instead, since the
-// mapping from token -> computed style (text-5xl -> 48px, text-[#ff0000]
-// -> exact red) is deterministic Tailwind behaviour, not something this
-// test needs to re-derive. The true computed-style / visual assertions
-// (AC2, AC3, AC4) live in the Playwright suite (e2e/homepage-title.spec.ts),
-// where the real dev server serves the generated CSS.
+// mapping from token -> computed style (text-6xl -> 60px, text-[#0000ff]
+// -> exact blue, dark:text-[#60a5fa] -> lighter blue) is deterministic
+// Tailwind behaviour, not something this test needs to re-derive. The true
+// computed-style / visual assertions (AC2, AC3, AC4) live in the Playwright
+// suite (e2e/homepage-title.spec.ts), where the real dev server serves the
+// generated CSS.
 
-describe('Home page — title (DIGT-32)', () => {
-  it('TC1/TC4: renders the "Recipes" heading at the enlarged text-5xl size', () => {
+describe('Home page — title (DIGT-33)', () => {
+  it('TC1: renders the "Recipes" heading at the enlarged text-6xl size', () => {
     render(<Home />)
 
     const heading = screen.getByRole('heading', { level: 1, name: 'Recipes' })
     expect(heading).toBeInTheDocument()
-    expect(heading.className).toContain('text-5xl')
-    expect(heading.className).not.toContain('text-4xl')
+    expect(heading.className).toContain('text-6xl')
+    expect(heading.className).not.toContain('text-5xl')
   })
 
-  it('TC2: applies the exact/true red arbitrary-value token, with no dark-mode override', () => {
+  it('TC2: applies the exact/true blue arbitrary-value token in light mode', () => {
     render(<Home />)
 
     const heading = screen.getByRole('heading', { level: 1, name: 'Recipes' })
-    expect(heading.className).toContain('text-[#ff0000]')
-    // AC4: the previous zinc/dark override must be gone so red applies in
-    // both themes — no separate dark: color class should remain.
-    expect(heading.className).not.toMatch(/dark:text-zinc-\d+/)
-    expect(heading.className).not.toContain('text-zinc-900')
+    expect(heading.className).toContain('text-[#0000ff]')
+    expect(heading.className).not.toContain('text-[#ff0000]')
+  })
+
+  it('TC3/TC8: re-introduces the dark: override with the lighter blue-400, not the exact blue', () => {
+    render(<Home />)
+
+    const heading = screen.getByRole('heading', { level: 1, name: 'Recipes' })
+    expect(heading.className).toContain('dark:text-[#60a5fa]')
   })
 
   it('TC1: keeps the weight/tracking utilities unchanged alongside the resize', () => {
