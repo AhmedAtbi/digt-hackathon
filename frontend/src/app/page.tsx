@@ -68,7 +68,7 @@ export default function Home() {
       <main className="mx-auto w-full max-w-5xl px-6 py-16">
         <header className="mb-10 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h1 className="text-4xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+            <h1 className="text-5xl font-semibold tracking-tight text-[#ff0000]">
               Recipes
             </h1>
             <p className="mt-2 text-zinc-500 dark:text-zinc-400">
